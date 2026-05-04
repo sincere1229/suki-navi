@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>好きナビ - 次世代に伝えたい本と音楽</title>
+  <style>body{font-family:sans-serif;max-width:800px;margin:0 auto;padding:20px}</style>
+</head>
+<body>
+  <h1>🔍 好きナビ</h1>
+  <p>この小説家/アーティストが好きなら、次のおすすめは？<br>
+  <small>次世代に伝えたい本と音楽の好みマッチング</small></p>
+  
+  <input type="text" id="search" placeholder="村上春樹 or YOASOBI" style="width:60%;padding:10px;font-size:16px">
+  <button onclick="recommend()" style="padding:10px 20px;font-size:16px">ナビする！</button>
+  
+  <div id="result" style="margin-top:30px"></div>
+  
+  <script>
+    const data = {
+      '村上春樹': ['伊坂幸太郎 (会話が軽快)', '古川日出男 (文体似)', '佐藤正午 (日常描写深)', '安部公房 (不条理)', '大崎善生 (音楽テーマ)'],
+      '東野圭吾': ['湊かなえ (イヤミス)', '今村昌弘 (どんでん返し)', '米澤穂信 (青春ミステリ)', '池井戸潤 (社会派)', '葉真中顕 (心理戦)'],
+      'YOASOBI': ['Vaundy (ポップ)', 'Aimer (エモ)', '藤井風 (ソウル)', 'Official髭男dism (キャッチー)', 'ずっと真夜中でいいのに'],
+      '米津玄師': ['Vaundy', '藤井風', 'Official髭男dism', 'Ado', 'YOASOBI'],
+      // 20人分→100人へ拡張
+      '芥川龍之介': ['太宰治', '夏目漱石', '有島武郎', '森鴎外']
+    };
+    
+    function recommend() {
+      const input = document.getElementById('search').value.trim();
+      const resultDiv = document.getElementById('result');
+      if (!input) return resultDiv.innerHTML = '<p>作家名を入力してください</p>';
+      
+      const recs = data[input] || ['まだ未登録です。Twitterでリクエストを！ @yourhandle'];
+      let html = `<h2>🎯 ${input}好きならコレ！</h2><ol>`;
+      recs.forEach((rec, i) => {
+        html += `<li>${rec} <a href="https://www.amazon.co.jp/s?k=${encodeURIComponent(rec)}" target="_blank">📖買う</a></li>`;
+      });
+      html += '</ol><p><small>Amazonアフィリエイト</small></p>';
+      resultDiv.innerHTML = html;
+    }
+    
+    // Enterキー対応
+    document.getElementById('search').addEventListener('keypress', e => e.key === 'Enter' && recommend());
+  </script>
+</body>
+</html>
