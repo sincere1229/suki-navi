@@ -43,5 +43,75 @@
     // Enterキー対応
     document.getElementById('search').addEventListener('keypress', e => e.key === 'Enter' && recommend());
   </script>
+  <script>
+  // 好きナビ データ例（あとで増やせます）
+  const data = {
+    '村上春樹': [
+      '伊坂幸太郎（会話が軽快で、日常の中の不思議さが似ている）',
+      '古川日出男（文体のリズムや空気感が近い）',
+      '佐藤正午（静かな日常の深掘りが魅力）'
+    ],
+    '東野圭吾': [
+      '湊かなえ（人間の闇を描くイヤミス系）',
+      '伊坂幸太郎（伏線とユーモアのバランスが良い）',
+      '宮部みゆき（人間ドラマの深さが共通している）'
+    ],
+    'YOASOBI': [
+      'ヨルシカ（物語性のある歌詞世界が似ている）',
+      'ずっと真夜中でいいのに。（独特の世界観と余韻）',
+      'Vaundy（キャッチーで感情の起伏が近い）'
+    ]
+  };
+
+  // ボタンから呼ばれる関数
+  function recommend() {
+    const inputEl = document.querySelector('input');
+    const keyword = inputEl.value.trim();
+    const resultAreaId = 'result-area';
+
+    // 結果表示用のdivがなければ作る
+    let resultDiv = document.getElementById(resultAreaId);
+    if (!resultDiv) {
+      resultDiv = document.createElement('div');
+      resultDiv.id = resultAreaId;
+      resultDiv.style.marginTop = '24px';
+      document.body.appendChild(resultDiv);
+    }
+
+    if (!keyword) {
+      resultDiv.innerHTML = '<p>好きな小説家やアーティストの名前を入力してください。</p>';
+      return;
+    }
+
+    const recs = data[keyword];
+    if (!recs) {
+      resultDiv.innerHTML = `<p>まだ「${keyword}」のデータはありません。これから追加していきます。</p>`;
+      return;
+    }
+
+    // HTML整形
+    let html = `<h2>${keyword} が好きなあなたへおすすめ</h2><ul>`;
+    recs.forEach(name => {
+      const plain = name.split('（')[0]; // 括弧の前だけを取り出す
+      html += `
+        <li style="margin:8px 0;">
+          ${name}
+          <a href="https://www.amazon.co.jp/s?k=${encodeURIComponent(plain)}" 
+             target="_blank" 
+             style="margin-left:8px;font-size:0.9em;">🔗 Amazonで見る</a>
+        </li>`;
+    });
+    html += '</ul>';
+
+    resultDiv.innerHTML = html;
+  }
+
+  // Enterキーで検索
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      recommend();
+    }
+  });
+</script>
 </body>
 </html>
