@@ -4,109 +4,96 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
   <title>好きナビ - 次世代に伝えたい本と音楽</title>
-  <style>body{font-family:sans-serif;max-width:800px;margin:0 auto;padding:20px}</style>
+  <style>
+    body{font-family:sans-serif;max-width:800px;margin:0 auto;padding:20px}
+    h1{margin-bottom:8px;}
+    small{color:#666;}
+    #result{margin-top:30px;}
+  </style>
 </head>
 <body>
   <h1>🔍 好きナビ</h1>
-  <p>この小説家/アーティストが好きなら、次のおすすめは？<br>
-  <small>次世代に伝えたい本と音楽の好みマッチング</small></p>
+  <p>
+    この小説家/アーティストが好きなら、次のおすすめは？<br>
+    <small>次世代に伝えたい本と音楽の好みマッチング</small>
+  </p>
   
-  <input type="text" id="search" placeholder="村上春樹 or YOASOBI" style="width:60%;padding:10px;font-size:16px">
-  <button onclick="recommend()" style="padding:10px 20px;font-size:16px">ナビする！</button>
+  <input
+    type="text"
+    id="search"
+    placeholder="村上春樹 / 東野圭吾 / YOASOBI など"
+    style="width:60%;padding:10px;font-size:16px"
+  >
+  <button onclick="recommend()" style="padding:10px 20px;font-size:16px">
+    ナビする！
+  </button>
   
-  <div id="result" style="margin-top:30px"></div>
+  <div id="result"></div>
   
   <script>
+    // 好きナビの元データ（ここを少しずつ増やしていく）
     const data = {
-      '村上春樹': ['伊坂幸太郎 (会話が軽快)', '古川日出男 (文体似)', '佐藤正午 (日常描写深)', '安部公房 (不条理)', '大崎善生 (音楽テーマ)'],
-      '東野圭吾': ['湊かなえ (イヤミス)', '今村昌弘 (どんでん返し)', '米澤穂信 (青春ミステリ)', '池井戸潤 (社会派)', '葉真中顕 (心理戦)'],
-      'YOASOBI': ['Vaundy (ポップ)', 'Aimer (エモ)', '藤井風 (ソウル)', 'Official髭男dism (キャッチー)', 'ずっと真夜中でいいのに'],
-      '米津玄師': ['Vaundy', '藤井風', 'Official髭男dism', 'Ado', 'YOASOBI'],
-      // 20人分→100人へ拡張
-      '芥川龍之介': ['太宰治', '夏目漱石', '有島武郎', '森鴎外']
+      '村上春樹': [
+        '伊坂幸太郎（会話が軽快で、日常の中の不思議さが似ている）',
+        '古川日出男（文体のリズムや空気感が近い）',
+        '佐藤正午（静かな日常の深掘りが魅力）'
+      ],
+      '東野圭吾': [
+        '湊かなえ（人間の闇を描くイヤミス系）',
+        '今村昌弘（どんでん返しが好きな人に）',
+        '米澤穂信（青春ミステリの雰囲気が合う）'
+      ],
+      'YOASOBI': [
+        'ヨルシカ（物語性のある歌詞世界が似ている）',
+        'ずっと真夜中でいいのに。（独特の世界観と余韻）',
+        'Vaundy（キャッチーで感情の起伏が近い）'
+      ]
     };
-    
+'米津玄師': [
+  'Vaundy（多彩な曲調とセルフプロデュース感が似ている）',
+  '藤井風（ピアノ中心の世界観）',
+  'Official髭男dism（ポップだけど音楽的に凝っている）'
+],
     function recommend() {
-      const input = document.getElementById('search').value.trim();
+      const inputEl = document.getElementById('search');
+      const keyword = inputEl.value.trim();
       const resultDiv = document.getElementById('result');
-      if (!input) return resultDiv.innerHTML = '<p>作家名を入力してください</p>';
-      
-      const recs = data[input] || ['まだ未登録です。Twitterでリクエストを！ @yourhandle'];
-      let html = `<h2>🎯 ${input}好きならコレ！</h2><ol>`;
-      recs.forEach((rec, i) => {
-        html += `<li>${rec} <a href="https://www.amazon.co.jp/s?k=${encodeURIComponent(rec)}" target="_blank">📖買う</a></li>`;
+
+      if (!keyword) {
+        resultDiv.innerHTML = '<p>好きな小説家やアーティストの名前を入力してください。</p>';
+        return;
+      }
+
+      const recs = data[keyword];
+      if (!recs) {
+        resultDiv.innerHTML = `<p>まだ「${keyword}」のデータはありません。これから少しずつ追加していきます。</p>`;
+        return;
+      }
+
+      let html = `<h2>🎯 「${keyword}」が好きなあなたへ</h2><ul>`;
+      recs.forEach((name) => {
+        const plain = name.split('（')[0]; // 名前だけを取り出す
+        html += `
+          <li style="margin:8px 0;">
+            ${name}
+            <a
+              href="https://www.amazon.co.jp/s?k=${encodeURIComponent(plain)}&tag=sincere1229-22"
+              target="_blank"
+              style="margin-left:8px;font-size:0.9em;"
+            >🔗 Amazonで見る</a>
+          </li>
+        `;
       });
-      html += '</ol><p><small>Amazonアフィリエイト</small></p>';
+      html += '</ul>';
       resultDiv.innerHTML = html;
     }
-    
-    // Enterキー対応
-    document.getElementById('search').addEventListener('keypress', e => e.key === 'Enter' && recommend());
-  </script>
-  
-</body>
-  <script>
-  const data = {
-    '村上春樹': [
-      '伊坂幸太郎（会話が軽快で、日常の中の不思議さが似ている）',
-      '古川日出男（文体のリズムや空気感が近い）',
-      '佐藤正午（静かな日常の深掘りが魅力）'
-    ],
-    '東野圭吾': [
-      '湊かなえ（人間の闇を描くイヤミス系）',
-      '伊坂幸太郎（伏線とユーモアのバランスが良い）',
-      '宮部みゆき（人間ドラマの深さが共通している）'
-    ],
-    'YOASOBI': [
-      'ヨルシカ（物語性のある歌詞世界が似ている）',
-      'ずっと真夜中でいいのに。（独特の世界観と余韻）',
-      'Vaundy（キャッチーで感情の起伏が近い）'
-    ]
-  };
 
-  function recommend() {
-    const inputEl = document.querySelector('input');
-    const keyword = inputEl.value.trim();
-    let resultDiv = document.getElementById('result-area');
-
-    if (!resultDiv) {
-      resultDiv = document.createElement('div');
-      resultDiv.id = 'result-area';
-      resultDiv.style.marginTop = '24px';
-      document.body.appendChild(resultDiv);
-    }
-
-    if (!keyword) {
-      resultDiv.innerHTML = '<p>好きな小説家やアーティストの名前を入力してください。</p>';
-      return;
-    }
-
-    const recs = data[keyword];
-    if (!recs) {
-      resultDiv.innerHTML = `<p>まだ「${keyword}」のデータはありません。これから追加していきます。</p>`;
-      return;
-    }
-
-    let html = `<h2>${keyword} が好きなあなたへおすすめ</h2><ul>`;
-    recs.forEach(name => {
-      const plain = name.split('（')[0];
-      html += `
-        <li style="margin:8px 0;">
-          ${name}
-          <a href="https://www.amazon.co.jp/s?k=${encodeURIComponent(plain)}" 
-             target="_blank" 
-             style="margin-left:8px;font-size:0.9em;">🔗 Amazonで見る</a>
-        </li>`;
+    // Enterキーでナビ
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        recommend();
+      }
     });
-    html += '</ul>';
-
-    resultDiv.innerHTML = html;
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      recommend();
-    }
-  });
-</script>
+  </script>
+</body>
 </html>
