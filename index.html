@@ -17,19 +17,19 @@
     この小説家/アーティストが好きなら、次のおすすめは？<br>
     <small>次世代に伝えたい本と音楽の好みマッチング</small>
   </p>
-  
+
   <input
     type="text"
     id="search"
-    placeholder="村上春樹 / 東野圭吾 / YOASOBI など"
+    placeholder="村上春樹 / 東野圭吾 / YOASOBI / 米津玄師 など"
     style="width:60%;padding:10px;font-size:16px"
   >
   <button onclick="recommend()" style="padding:10px 20px;font-size:16px">
     ナビする！
   </button>
-  
+
+  <!-- 検索結果表示エリア（※1つだけ） -->
   <div id="result"></div>
-    <div id="result"></div>
 
   <!-- ここから 1970年代コラム -->
   <section style="margin-top:40px;">
@@ -53,11 +53,9 @@
       <li>岬／中上健次</li>
       <li>限りなく透明に近いブルー／村上龍</li>
     </ul>
-
-   
   </section>
   <!-- 1970年代コラムここまで -->
-  
+
   <script>
     // 好きナビの元データ（ここを少しずつ増やしていく）
     const data = {
@@ -75,13 +73,14 @@
         'ヨルシカ（物語性のある歌詞世界が似ている）',
         'ずっと真夜中でいいのに。（独特の世界観と余韻）',
         'Vaundy（キャッチーで感情の起伏が近い）'
+      ],
+      '米津玄師': [
+        'Vaundy（多彩な曲調とセルフプロデュース感が似ている）',
+        '藤井風（ピアノ中心の世界観）',
+        'Official髭男dism（ポップだけど音楽的に凝っている）'
       ]
     };
-'米津玄師': [
-  'Vaundy（多彩な曲調とセルフプロデュース感が似ている）',
-  '藤井風（ピアノ中心の世界観）',
-  'Official髭男dism（ポップだけど音楽的に凝っている）'
-],
+
     function recommend() {
       const inputEl = document.getElementById('search');
       const keyword = inputEl.value.trim();
